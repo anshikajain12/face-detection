@@ -1,23 +1,51 @@
-import logo from './logo.svg';
 import './App.css';
-
+import {useEffect,useRef} from "react";
+import * as faceapi from 'face-api.js';
+import as from './Assests/images (1).jpg';
 function App() {
+  const imgRef=useRef();
+  const canvasRef= useRef();
+
+  const handleImage= async()=>{
+    const detections = await faceapi.detectAllFaces(
+      imgRef.current,
+      new faceapi.TinyFaceDetectorOptions()
+      ).withFaceLandmarks().withFaceExpressions();
+
+      canvasRef.current.innerHtml= faceapi.createCanvasFromMedia(imgRef.current);
+      faceapi.matchDimensions(canvasRef.current,{
+        width:940, 
+        height:650,
+      })
+      const resized = faceapi.resizeResults(detections,{
+        width:940, 
+        height:650,
+      })
+      faceapi.draw.drawDetections(canvasRef.current,resized);
+      faceapi.draw.drawFaceExpressions(canvasRef.current,resized);
+      faceapi.draw.drawFaceLandmarks(canvasRef.current,resized);
+  
+  }
+
+  useEffect(()=>{
+    const loadModels=()=>{
+      Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUr("/models"),
+        faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+        faceapi.nets.faceRecognitionNet.loadFromuri("/models"),
+        faceapi.nets.faceExpressionNet.loadFromUri("/models"),
+      ])
+      .then(handleImage)
+      .catch((e)=>console.log(e));
+    };
+    imgRef.current && loadModels();
+  },[]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <img  crossOrigin="anonymous" ref={imgRef} src={as} alt="" width="940" height="650" />
+      <canvas  ref={canvasRef} width="940" height="650"/>
+      
     </div>
   );
 }
