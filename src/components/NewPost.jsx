@@ -1,7 +1,6 @@
 import React from 'react'
 import {useEffect,useRef} from "react";
 import * as faceapi from 'face-api.js';
-import as from './Assests/images (1).jpg';
 
 function NewPost() {
     const imgRef=useRef();
@@ -44,8 +43,8 @@ function NewPost() {
     },[]);
   return (
     <div>
-         <img  crossOrigin="anonymous" ref={imgRef} src={as} alt="" width="940" height="650" />
-      <canvas  ref={canvasRef} width="940" height="650"/>
+         <img   src="" alt=""  />
+      
       
     </div>
   )

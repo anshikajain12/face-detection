@@ -24,6 +24,15 @@ canvas{
   display: flex;
 
 }
+label{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.adding{
+  width: 25px;
+   
+}
 .postForm{
   display: flex;
   flex-direction: column;
@@ -34,3 +43,8 @@ canvas{
   height: 50px;
   border-radius: 50%;
 }
+.postInput{
+  height: 38px;
+  border: none;
+  margin-bottom: 10px;
+} 
